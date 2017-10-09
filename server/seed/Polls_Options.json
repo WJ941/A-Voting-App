@@ -1,0 +1,34 @@
+[
+  {
+    "PollId": 1,
+    "OptionId": 1
+  },
+  {
+    "PollId": 1,
+    "OptionId": 2
+  },
+  {
+    "PollId": 2,
+    "OptionId": 1
+  },
+  {
+    "PollId": 2,
+    "OptionId": 2
+  },
+  {
+    "PollId": 3,
+    "OptionId": 1
+  },
+  {
+    "PollId": 3,
+    "OptionId": 2
+  },
+  {
+    "PollId": 4,
+    "OptionId": 1
+  },
+  {
+    "PollId": 4,
+    "OptionId": 2
+  }
+]
