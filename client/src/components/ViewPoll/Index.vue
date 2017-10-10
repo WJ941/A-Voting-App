@@ -16,7 +16,7 @@
          </div>
       </v-flex>
       <v-flex xs12 sm8>
-        <pie-chart v-if="poll.options" :options="poll.options"/>
+        <pie-chart :options="poll.options"/>
       </v-flex>
     </v-layout>
   </div>
@@ -39,20 +39,9 @@ export default {
     const pollId = this.$route.params.pollId
     const data = (await PollService.getPoll(pollId)).data
     this.poll.title = data[0].Poll.title
-    // data.forEach((x) => {
-    //   this.poll.options[x.Option.id - 1] = x.Option
-    // })
-    this.poll.options = [
-      {
-        'text': 'a',
-        value: 3
-      },
-      {
-        'text': 'b',
-        value: 3
-      }
-    ]
-    console.log(this.poll.options)
+    data.forEach((x) => {
+      this.poll.options.push(x.Option)
+    })
   },
   components: {
     PieChart

@@ -3,6 +3,7 @@ import 'd3-selection-multi'
 export default {
   createPieChart (arr, id) {
     let percentage
+    let colors = ['steelblue', 'cyan', 'lime', 'teal', 'navy']
     let r = 150
     let strokeWidth = 50
     let perimeter = r * 3.14 * 2
@@ -31,9 +32,9 @@ export default {
         return perimeter * percentage + ',' + perimeter * (1 - percentage)
       },
       stroke: (d, i) => {
-        // return colors[i]
+        return colors[i]
         // return "hsb(" + Math.random()   + ", 1, 1)";
-        return 'hsl(' + Math.random() * 360 + ',100%,50%)'
+        // return 'hsl(' + Math.random() * 360 + ',100%,50%)'
       },
       transform: (d, i) => {
         let rotateAngle

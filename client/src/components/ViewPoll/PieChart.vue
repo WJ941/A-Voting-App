@@ -12,17 +12,21 @@ export default {
     return {}
   },
   props: ['options'],
-  mounted () {
-    var optinsData = []
-    this.options.forEach((option, index) => {
-      optinsData[index] = option.value
-    })
-    console.log('pie chart data', this.options)
-    createPieChart.createPieChart(optinsData, '#svg')
+  watch: {
+    options: function () {
+      var optionsData = []
+      this.options.forEach((option, index) => {
+        optionsData[index] = option.value
+      })
+      createPieChart.createPieChart(optionsData, '#svg')
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+svg:hover circle{
+  border: 1px solid red;
+}
 </style>
