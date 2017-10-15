@@ -8,14 +8,15 @@
           v-bind:items="poll.options"
           label="Choose an option..."
           bottom
-          item-value="text"
+          item-value="id"
+          v-model="newOptionId"
         ></v-select>
         <div>
-         <v-btn block color="primary">Submit</v-btn>
+         <v-btn block color="primary" @click="submit">Submit</v-btn>
          <v-btn block color="primary">Share On Twitter</v-btn>
          </div>
       </v-flex>
-      <v-flex xs12 sm8>
+      <v-flex xs12 sm8 class="pl-6">
         <pie-chart :options="poll.options"/>
       </v-flex>
     </v-layout>
@@ -24,6 +25,7 @@
 
 <script>
 import PollService from '@/service/PollService'
+import optionService from '@/service/optionService'
 import PieChart from './Piechart'
 export default {
   data () {
@@ -32,19 +34,48 @@ export default {
       poll: {
         title: '',
         options: []
-      }
+      },
+      newOptionId: null
     }
   },
   async mounted () {
-    const pollId = this.$route.params.pollId
-    const data = (await PollService.getPoll(pollId)).data
-    this.poll.title = data[0].Poll.title
-    data.forEach((x) => {
-      this.poll.options.push(x.Option)
-    })
+    this.updatePoll()
   },
   components: {
     PieChart
+  },
+  methods: {
+    async submit () {
+      const pollId = this.$route.params.pollId
+      if (this.newOptionId) {
+        let newOption = this.poll.options.filter((x) => x.id === this.newOptionId)
+        if (newOption.length) {
+          newOption = newOption[0]
+          newOption = ({
+            text: newOption.text,
+            value: newOption.value + 1
+          })
+          let newObj = {
+            optionId: this.newOptionId,
+            pollId: pollId,
+            option: newOption
+          }
+          try {
+            console.log(newObj)
+            await optionService.update(newObj)
+            this.updatePoll()
+          } catch (err) {
+            console.log(err)
+          }
+        }
+      }
+    },
+    async updatePoll () {
+      const pollId = this.$route.params.pollId
+      const data = (await PollService.getPoll(pollId)).data
+      this.poll.title = data[0].Poll.title
+      this.poll.options = data.map(x => x.Option)
+    }
   }
 }
 </script>
