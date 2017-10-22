@@ -61,13 +61,14 @@ export default {
             option: newOption
           }
           try {
-            console.log(newObj)
             await optionService.update(newObj)
             this.updatePoll()
           } catch (err) {
             console.log(err)
           }
         }
+      } else {
+        alert('You must choose a option to vote for')
       }
     },
     async updatePoll () {

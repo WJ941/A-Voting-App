@@ -1,78 +1,113 @@
 <template>
-  <div id="pieChart"></div>
+  <div class = 'container'></div>
 </template>
 
 <script>
 const d3 = require('d3')
 export default {
   data () {
-    return {}
+    return {
+    }
   },
   props: ['options'],
+  // options: [
+  //   {
+  //     text: 'a',
+  //     value: 3
+  //   },
+  //   {
+  //     text: 'b',
+  //     value: 3
+  //   }
+  // ]
+  mounted () {
+    this.width = 350
+    this.height = 350
+    this.radius = Math.min(this.width, this.height) * 0.8 / 2
+    this.arc = d3
+      .arc()
+      .innerRadius(this.radius / 2)
+      .outerRadius(this.radius)
+    this.svg = d3
+      .select(this.$el)
+      .append('svg')
+      .attr('width', this.width)
+      .attr('height', this.height)
+    this.pieParent = this.svg
+      .append('g')
+      .attr('transform', `translate(${this.width / 2}, ${this.height / 2})`)
+  },
   watch: {
-    options: function () {
-      let [width, height] = [350, 350]
-      let data = this.options
-      let radius = Math.min(width, height) * 0.8 / 2
-      let arc = d3.arc().innerRadius(radius / 2).outerRadius(radius)
+    options () {
+      this.drawChart(this.options)
+    }
+  },
+  methods: {
+    drawChart (data) {
+      let that = this
       let drawData = d3.pie().value((d) => d.value)(data)
       let colorScale = d3.scaleOrdinal().domain(d3.range(0, data.length)).range(d3.schemeCategory20c)
-  // ------
-      d3.selectAll('#pieChart *').remove()
-      let svg = d3
-        .select('#pieChart')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-      let pathParent = svg.append('g')
-      pathParent
-        .selectAll('path')
+      let piePaths = this.pieParent.selectAll('path')
+      if (piePaths.size() === 0) {
+        piePaths = piePaths
+          .data(drawData)
+          .enter()
+          .append('path')
+      }
+      piePaths
         .data(drawData)
-        .enter()
-        .append('path')
-        .attr('d', x => arc(x))
-        .attr('transform', `translate(${width / 2}, ${height / 2})`)
         .attr('fill', (d, i) => colorScale(i))
-        .attr('transform', `translate(${width / 2}, ${height / 2})`)
-
+        .attr('d', d => this.arc(d))
+      var STYLE_MODULE_NAME = this.$el.attributes[0].name
       let textContainer = d3
-        .select('#pieChart')
+        .select(this.$el)
         .append('div')
         .style('position', 'absolute')
         .style('opacity', 0)
       let textContent = textContainer
         .append('div')
         .attr('class', 'tooltip')
+        .attr(STYLE_MODULE_NAME, '')
       textContainer
         .append('div')
         .attr('class', 'triangle')
-      pathParent
+        .attr(STYLE_MODULE_NAME, '')
+      this.pieParent
         .selectAll('path')
         .data(drawData)
         .on('mouseenter', function (d, i) {
           textContent.text(d.data.text + ':' + d.data.value)
-          let xandy = arc.centroid(d)
+          let xandy = that.arc.centroid(d)
           let x = xandy[0]
           let y = xandy[1]
-          let textWidth = textContainer.style('width')
-          let textHeight = textContainer.style('height')
+          let textWidth = textContainer.style('width').replace('px', '')
+          let textHeight = textContainer.style('height').replace('px', '')
           textContainer
             .style('opacity', 1)
-            .style('top', y + height / 2 - textHeight.replace('px', '') + 'px')
-            .style('left', x + width / 2 - textWidth.replace('px', '') / 2 + 'px')
+            .style('top', y + that.height / 2 - textHeight + 'px')
+            .style('left', x + that.width / 2 - textWidth / 2 + 'px')
         })
         .on('mouseleave', function () {
           textContainer.style('opacity', 0)
         })
-      let tagbar = d3
-        .select('#pieChart')
+        // --------tag bar -----------
+      let x = d3.scalePoint()
+        .rangeRound([0, this.width]).padding(0.9)
+        .domain(data.map(d => d.text))
+      let tagbar = d3.select(this.$el).select('#tagbar')
+      if (tagbar.size() === 0) {
+        tagbar = d3
+        .select(this.$el)
         .append('svg')
-        .attr('width', width)
+        .attr('id', 'tagbar')
+        .attr('width', this.width)
+        .attr('height', '20')
+      }
       tagbar.selectAll('rect')
         .data(data)
         .enter()
         .append('rect')
-        .attr('x', (d, i) => i * 40 + (width - data.length * 40) / 2)
+        .attr('x', d => x(d.text))
         .attr('rx', 5)
         .attr('ry', 5)
         .attr('width', '20')
@@ -85,11 +120,11 @@ export default {
         .attr('height', '20')
         .text((d) => d.text)
         .attr('font-size', 16)
-        .attr('x', (d, i) => (2 * i + 1) * 20 + (width - data.length * 40) / 2)
+        .attr('x', d => x(d.text) + 30)
         .attr('y', 16)
     }
-  }
-}
+  }// methods
+}// export default
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
@@ -97,7 +132,7 @@ export default {
 *{
   box-sizing: border-box;
 }
-#pieChart{
+.container {
   position: relative;
   margin: 0;
   height: 350px;
