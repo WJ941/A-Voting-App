@@ -27,7 +27,7 @@ export default new Router({
       component: Polls
     },
     {
-      path: '*',
+      path: '/*',
       name: 'callback_github',
       component: Callback
     }

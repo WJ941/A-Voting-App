@@ -51,10 +51,11 @@ export default {
     }
   },
   methods: {
+    // get the path including client id and then redirecting to github authentication page.
     async loginGithub () {
-      let res = (await Authentication.loginGithub()).data
-      // window.location = res.data // get the path including client id and then redirecting to github authentication page.
-      window.open(res)
+      let path = (await Authentication.loginGithub()).data
+      var newWindow = window.open(path, '_blank')
+      newWindow.opener = null
     },
     logout () {
       this.$store.dispatch('setToken', null)

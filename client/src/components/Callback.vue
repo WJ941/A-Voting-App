@@ -20,11 +20,12 @@ export default {
         email: email,
         username: login
       })).data
-      this.$store.dispatch('setToken', response.token)
-      this.$store.dispatch('setUser', response.user)
-      window.localStorage.setItem('user', response.user.username)
+      // this.$store.dispatch('setToken', response.token)
+      // this.$store.dispatch('setUser', response.user)
+      window.localStorage.setItem('user', JSON.stringify(response.user))
       window.localStorage.setItem('token', response.token)
       console.log('storage changed')
+      window.close()
     }
   }
 }
