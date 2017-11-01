@@ -12,7 +12,8 @@
                 slot="item"
                 :to="{
                   name: 'view-poll',
-                  params: {
+                  path: 'polls',
+                  query: {
                     pollId: poll.id
                   }
                 }"
@@ -35,15 +36,39 @@ import PollService from '../service/PollService'
 export default {
   data () {
     return {
-      polls: null
+      polls: null,
+      userInfo: null
     }
   },
   async mounted () {
     this.polls = (await PollService.index()).data
+    window.addEventListener('storage', function (event) {
+      console.log(event.key, event.newValue)
+      // if (localStorage.getItem('user') && localStorage.getItem('token')) {
+      //   console.log('local storage setted')
+      //   this.$store.dispatch('setToken', localStorage.getItem('user'))
+      //   this.$store.dispatch('setUser', localStorage.getItem('token'))
+      // }
+    })
   },
   methods: {
     navigatedTo (args) {
       this.$router.push(args)
+    }
+  },
+  computed: {
+    isGetMyPolls () {
+      return this.$store.state.isGetMyPolls
+    }
+  },
+  watch: {
+    async isGetMyPolls () {
+      console.log('isGetMyPolls is ', this.isGetMyPolls)
+      let userId = this.$store.state.user.id
+      let response = (await PollService.index({
+        userId: userId
+      })).data
+      this.polls = response
     }
   }
 }

@@ -12,7 +12,6 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 sync(store, router)
-
 new Vue({
   el: '#app',
   router,
