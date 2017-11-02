@@ -42,22 +42,10 @@ export default {
   },
   async mounted () {
     this.polls = (await PollService.index()).data
-    this.setState()
-    var that = this
-    window.addEventListener('storage', function (event) {
-      console.log(event.key, event.newValue)
-      that.setState()
-    })
   },
   methods: {
     navigatedTo (args) {
       this.$router.push(args)
-    },
-    setState () {
-      if (localStorage.getItem('user') && localStorage.getItem('token')) {
-        this.$store.dispatch('setToken', localStorage.getItem('token'))
-        this.$store.dispatch('setUser', JSON.parse(localStorage.getItem('user')))
-      }
     }
   },
   computed: {

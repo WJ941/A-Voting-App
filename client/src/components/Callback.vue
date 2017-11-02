@@ -20,10 +20,9 @@ export default {
         email: email,
         username: login
       })).data
-      // this.$store.dispatch('setToken', response.token)
-      // this.$store.dispatch('setUser', response.user)
-      window.localStorage.setItem('user', JSON.stringify(response.user))
-      window.localStorage.setItem('token', response.token)
+      sessionStorage.setItem('user', JSON.stringify(response.user))
+      sessionStorage.setItem('token', response.token)
+      localStorage.setItem('userLoggedin', Date.now())
       console.log('storage changed')
       window.close()
     }
