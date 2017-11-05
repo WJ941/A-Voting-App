@@ -16,5 +16,8 @@ module.exports  = (app) => {
   ),
   app.post('/signingithub',
     AuthenticationController.signinGithub
+  ),
+  app.post('/newpoll',
+    PollController.post
   )
 }

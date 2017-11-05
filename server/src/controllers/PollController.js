@@ -1,8 +1,10 @@
 const {
   Poll,
   pollOption,
-  Option
+  Option,
+  UserGithub
 } = require('../models')
+var Promise = require('bluebird')
 module.exports = {
   async index (req, res) {
     let polls = null
@@ -43,5 +45,47 @@ module.exports = {
         Message: 'an error occurred trying to fetch the polls'
       })
     }
+  },
+  async post (req, res) {
+    var data = req.body
+    console.log('userId: ', data.userId)
+    try {
+      var user = await UserGithub.findOne({
+        where: {id: data.userId}
+      })
+    } catch (e) {
+      res.status(200).end('Can not find the user in database')
+    }
+    try {
+      var [poll, pollIsNew] = await Poll.findOrCreate({
+        where: {
+          title: data.title,
+          UserGithubId: user.id
+        }
+      })
+    } catch (e) {
+      return res.status(400).send('Error ocoured in creating poll')
+    }
+    // ---------------save options------------
+    var options = data.options
+    var newOptions = await Promise.map(options, function (option) {
+      return Option.findOrCreate({where: option})
+    })
+    newOptions = newOptions.map(x => x[0])
+    var newPollOptions = await Promise.map(newOptions, function (option) {
+      return pollOption.findOrCreate({
+        where: {
+          PollId: poll.id,
+          OptionId: option.id
+        }
+      })
+    })
+    res.status(200).send({
+      user: user,
+      poll: poll,
+      pollIsNew: pollIsNew,
+      options: newOptions,
+      PollOption: newPollOptions
+    })
   }
 }

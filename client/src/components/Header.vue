@@ -25,6 +25,9 @@
       <v-btn
         flat
         v-if="$store.state.isUserLoggedIn"
+        :to="{
+          path:'/newPoll'
+        }"
       >New Polls</v-btn>
       <v-menu offset-y v-if="$store.state.isUserLoggedIn">
         <v-btn class="primary--text"  slot="activator">{{$store.state.user.username}}</v-btn>

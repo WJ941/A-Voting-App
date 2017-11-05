@@ -18,4 +18,13 @@ npm run build
 npm run build --report
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+# Promsie
+
+1.create a new Promise 
+```bash
+return a new Promise(function(reslove, rejection){
+  // do some async work, when completed, call reslove, either call rejection
+  reslove (value)
+})
+```
+Actually It's is another write way of callback
