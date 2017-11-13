@@ -72,7 +72,7 @@ export default {
       }
     },
     async updatePoll () {
-      const pollId = this.$route.query.pollId
+      const pollId = this.$route.params.pollId
       const data = (await PollService.index({
         pollId: pollId
       })).data

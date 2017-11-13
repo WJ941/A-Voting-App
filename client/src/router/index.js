@@ -8,17 +8,17 @@ Vue.use(Router)
 
 export default new Router({
   routes: [
-    // {
-    //   path: '*',
-    //   redirect: 'polls'
-    // },
+    {
+      path: '*',
+      redirect: 'polls'
+    },
     {
       path: '/polls',
       name: 'polls',
       component: Polls
     },
     {
-      path: '/polls',
+      path: '/poll/:pollId',
       name: 'view-poll',
       component: viewPoll
     },
@@ -33,7 +33,7 @@ export default new Router({
       component: newPoll
     },
     {
-      path: '/*',
+      path: '/callback*',
       name: 'callback_github',
       component: Callback
     }

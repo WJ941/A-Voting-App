@@ -5,7 +5,7 @@ module.exports  = (app) => {
   app.get('/polls',
     PollController.index
   ),
-  app.put('/polls/:pollId/:optionId',
+  app.post('/poll/:pollId',
     OptionController.update
   ),
   app.get('/login_github',

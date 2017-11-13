@@ -10,16 +10,6 @@ export default {
     }
   },
   props: ['options'],
-  // options: [
-  //   {
-  //     text: 'a',
-  //     value: 3
-  //   },
-  //   {
-  //     text: 'b',
-  //     value: 3
-  //   }
-  // ]
   mounted () {
     this.width = 350
     this.height = 350
@@ -54,10 +44,20 @@ export default {
           .enter()
           .append('path')
       }
+      // a option use a path
       piePaths
         .data(drawData)
         .attr('fill', (d, i) => colorScale(i))
-        .attr('d', d => this.arc(d))
+        .transition()
+        .duration(500)
+        .attrTween('d', d => {
+          var that = this
+          var i = d3.interpolate(d.startAngle + 0.1, d.endAngle)
+          return function (t) {
+            d.endAngle = i(t)
+            return that.arc(d)
+          }
+        })
       var STYLE_MODULE_NAME = this.$el.attributes[0].name
       let textContainer = d3
         .select(this.$el)

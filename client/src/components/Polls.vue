@@ -12,8 +12,8 @@
                 slot="item"
                 :to="{
                   name: 'view-poll',
-                  path: 'polls',
-                  query: {
+                  path: 'poll',
+                  params: {
                     pollId: poll.id
                   }
                 }"

@@ -4,11 +4,15 @@ const {
 module.exports = {
   async update (req, res) {
     try {
-      console.log('optionid ', req.params.optionId)
-      console.log('req.body ', req.body)
+      let oldOption = await Option.findOne({
+        where: {
+          text: req.body.text
+        }
+      })
+      console.log('oldOption ', oldOption)
       let option = await Option.update(req.body, {
         where: {
-          id: req.params.optionId
+          id: oldOption.id
         }
       })
       res.status(200).send(option)

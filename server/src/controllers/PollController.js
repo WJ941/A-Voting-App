@@ -11,7 +11,6 @@ module.exports = {
     try {
       const userId = req.query.userId
       const pollId = req.query.pollId
-      console.log(userId)
       if (userId) {
         polls = await Poll.findAll({
           where: {
@@ -34,7 +33,7 @@ module.exports = {
         })
       } else {
         polls = await Poll.findAll({
-          limit: 10
+          // limit: 10
         })
       }
       console.log(pollId, req.query)
