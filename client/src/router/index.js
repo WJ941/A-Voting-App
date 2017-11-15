@@ -7,11 +7,8 @@ import Callback from '@/components/Callback'
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
-    {
-      path: '*',
-      redirect: 'polls'
-    },
     {
       path: '/polls',
       name: 'polls',
@@ -33,7 +30,7 @@ export default new Router({
       component: newPoll
     },
     {
-      path: '/callback*',
+      path: '/callback_github',
       name: 'callback_github',
       component: Callback
     }

@@ -9,7 +9,6 @@ module.exports = {
           text: req.body.text
         }
       })
-      console.log('oldOption ', oldOption)
       let option = await Option.update(req.body, {
         where: {
           id: oldOption.id
