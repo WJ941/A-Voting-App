@@ -54,7 +54,8 @@ var gitHubOauth = function (options) {
         })
         res.on('end', () => {
           try {
-            const parsedData = JSON.parse(rawData)
+            var parsedData = JSON.parse(rawData)
+            parsedData.accessToken = accessToken
             resolve(parsedData)
           } catch (e) {
             throw e

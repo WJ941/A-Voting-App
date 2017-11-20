@@ -1,7 +1,11 @@
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
-    email: DataTypes.STRING,
-    password: DataTypes.STRING
+    nickname: DataTypes.STRING,
+    avatar: DataTypes.STRING
   })
+  User.associate = function (model) {
+    User.hasMany(model.Poll)
+    User.hasMany(model.UserOauth)
+  }
   return User
 }

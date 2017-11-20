@@ -14,18 +14,19 @@ export default {
   async mounted () {
     let query = location.search
     this.userInfo = (await Authentication.getUserInfo(query)).data
-    const {email, login} = this.userInfo
-    if (email && login) {
-      const response = (await Authentication.signinGithub({
-        email: email,
-        username: login
-      })).data
-      sessionStorage.setItem('user', JSON.stringify(response.user))
-      sessionStorage.setItem('token', response.token)
-      localStorage.setItem('userLoggedin', Date.now())
-      console.log('storage changed')
-      window.close()
-    }
+    console.log(this.userInfo)
+    // const {email, login} = this.userInfo
+    // if (email && login) {
+    //   const response = (await Authentication.signinGithub({
+    //     email: email,
+    //     username: login
+    //   })).data
+    //   sessionStorage.setItem('user', JSON.stringify(response.user))
+    //   sessionStorage.setItem('token', response.token)
+    //   localStorage.setItem('userLoggedin', Date.now())
+    //   console.log('storage changed')
+    //   window.close()
+    // }
   }
 }
 </script>

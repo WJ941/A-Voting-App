@@ -1,6 +1,6 @@
-const config = require('../config/config')
-const {UserGithub} = require('../models')
-const jwt = require('jsonwebtoken')
+// const config = require('../config/config')
+const {User, UserOauth} = require('../models')
+// const jwt = require('jsonwebtoken')
 const GithubOauth = require('./GithubOauth')
 var options = {
   clientId: 'a3a201506e547487cd72',
@@ -11,11 +11,11 @@ var options = {
 }
 var githubOauth = new GithubOauth(options)
 
-function jwtSignUser (user) {
-  return jwt.sign(user, config.jwt.secret, {
-    expiresIn: config.jwt.expiresIn
-  })
-}
+// function jwtSignUser (user) {
+//   return jwt.sign(user, config.jwt.secret, {
+//     expiresIn: config.jwt.expiresIn
+//   })
+// }
 module.exports = {
   async loginGithub (req, res) {
     var redirectUrl = githubOauth.getAuthorizeAdress()
@@ -26,29 +26,71 @@ module.exports = {
     var requestToken = req.query.code
     try {
       var data = await githubOauth.getUserInfo(requestToken)
-      res.status(200).send(data)
+      var identityType = 'github'
+      var identifier = data.email
+      var credential = data.accessToken
+      var nickname = data.login
+      var avatar = data.avatar_url
+      var responseData
+      var oauthedUser = await UserOauth.findOne({
+        where: {
+          identityType: identityType,
+          identifier: identifier
+        }
+      })
+      // if user  hava oauth records, update access token
+      if (oauthedUser) {
+        await UserOauth.update(
+          {
+            credential: data.accessToken
+          },
+          {
+            where: {
+              id: oauthedUser.id
+            }
+          }
+        )
+        await User.update(
+          {
+            nickname: nickname,
+            avatar: avatar
+          },
+          {
+            where: {
+              id: oauthedUser.UserId
+            }
+          }
+        )
+        console.log('user id:::  ', oauthedUser.UserId)
+        var user = await User.findById(oauthedUser.UserId)
+        oauthedUser = await UserOauth.findById(oauthedUser.id)
+        responseData = {
+          user: user,
+          token: oauthedUser.credential
+        }
+      } else {
+        // if user don't have oauth, and then create user in table User and UserOauth.
+        var newUser = await User.create({
+          nickname: nickname,
+          avatar: avatar
+        })
+        // console.log('user dont have oauth record, new user id: ', newUser.id)
+        var newUserOauth = await UserOauth.create({
+          UserId: newUser.id,
+          identityType: identityType,
+          identifier: identifier,
+          credential: credential
+        })
+        console.log('newUserOauth', newUserOauth)
+        responseData = {
+          user: newUser,
+          token: newUserOauth.redential
+        }
+      }
+      res.status(200).send(responseData)
     } catch (e) {
       res.status(500).send(e)
     }
   },
-  async signinGithub (req, res) {
-    try {
-      const {email, username} = req.body
-      let githubUser = await UserGithub.findOrCreate({
-        where: {
-          email: email
-        },
-        defaults: {
-          username: username
-        }
-      })
-      let userJSON = githubUser[0].toJSON()
-      res.status(200).send({
-        user: userJSON,
-        token: jwtSignUser(userJSON)
-      })
-    } catch (e) {
-      res.status(400).send(e)
-    }
-  }
+  async signinGithub (req, res) {}
 }

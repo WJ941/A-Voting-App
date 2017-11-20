@@ -1,18 +1,18 @@
 [
   {
     "title": "test1",
-    "UserGithubId": 1
+    "UserId": 1
   },
   {
     "title": "test2",
-    "UserGithubId": 1
+    "UserId": 1
   },
   {
     "title": "test3",
-    "UserGithubId": 2
+    "UserId": 1
   },
   {
     "title": "test4",
-    "UserGithubId": 2
+    "UserId": 1
   }
 ]
