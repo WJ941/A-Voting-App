@@ -86,5 +86,19 @@ module.exports = {
       options: newOptions,
       PollOption: newPollOptions
     })
+  },
+  async delete (req, res) {
+    const pollId = req.params.pollId
+    try {
+      var deletedPoll = await Poll.destroy({
+        where: {
+          id: pollId
+        },
+        force: true
+      })
+      res.status(200).send({msg: 'delete succeed', deletedPoll: deletedPoll})
+    } catch (e) {
+      res.status(500).send({msg: 'delete succeed', error: e})
+    }
   }
 }

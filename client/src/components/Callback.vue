@@ -12,8 +12,8 @@ export default {
     }
   },
   async mounted () {
-    let search = location.search
-    this.userInfo = (await Authentication.getUserInfo(search)).data
+    let query = location.search
+    this.userInfo = (await Authentication.getUserInfo(query)).data
     const {email, login} = this.userInfo
     if (email && login) {
       const response = (await Authentication.signinGithub({

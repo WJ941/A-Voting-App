@@ -19,5 +19,8 @@ module.exports  = (app) => {
   ),
   app.post('/newpoll',
     PollController.post
+  ),
+  app.delete('/poll/:pollId',
+    PollController.delete
   )
 }

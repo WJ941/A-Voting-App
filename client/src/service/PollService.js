@@ -7,5 +7,8 @@ export default {
   },
   post (data) {
     return Api().post('/newpoll', data)
+  },
+  deletePoll (data) {
+    return Api().delete(`/poll/${data.pollId}`)
   }
 }

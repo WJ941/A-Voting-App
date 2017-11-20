@@ -3,8 +3,8 @@ export default {
   loginGithub () {
     return Api().get(`/login_github`)
   },
-  getUserInfo (search) {
-    return Api().get(`/getuserinfo${search}`)
+  getUserInfo (query) {
+    return Api().get(`/getuserinfo${query}`)
   },
   signinGithub (cridientals) {
     return Api().post('/signinGithub', cridientals)

@@ -12,12 +12,28 @@
           v-model="newOptionId"
         ></v-select>
         <div>
-         <v-btn block color="primary" @click="submit">Submit</v-btn>
-         <v-btn block color="primary">Share On Twitter</v-btn>
+          <v-btn
+            block
+            class="primary"
+            @click="submit"
+          >Submit</v-btn>
+          <v-btn
+            block
+            class="blue lighten-2"
+            @click="shareTwt"
+          >Share On Twitter</v-btn>
          </div>
       </v-flex>
       <v-flex xs12 sm8 class="pl-6">
         <pie-chart :options="poll.options"/>
+      </v-flex>
+      <v-flex xs12 sm8 offset-sm4 mt-5>
+        <v-btn
+          style="width:350px"
+          class="error"
+          @click="deletePoll"
+          v-if="this.poll.UserGithubId === this.$store.state.user.id"
+        >delete poll</v-btn>
       </v-flex>
     </v-layout>
   </div>
@@ -33,7 +49,8 @@ export default {
       e1: null,
       poll: {
         title: '',
-        options: []
+        options: [],
+        UserGithubId: null
       },
       newOptionId: null
     }
@@ -78,6 +95,27 @@ export default {
       })).data
       this.poll.title = data[0].Poll.title
       this.poll.options = data.map(x => x.Option)
+      this.poll.UserGithubId = data[0].Poll.UserGithubId
+    },
+    shareTwt () {
+      const curHref = location.href
+      const text = this.poll.title
+      const twtShareUrl = 'https://twitter.com/intent/tweet'
+      var newwindow = window.open(encodeURI(twtShareUrl + '?text=' + text + '&url=' + curHref))
+      newwindow.opener = null
+    },
+    async deletePoll () {
+      if (window.confirm('Do you really want to delete this poll?') && this.$store.state.user) {
+        const pollId = this.$route.params.pollId
+        const userId = this.$store.state.user.id
+        console.log('pollId', pollId, 'userId', userId)
+        var res = await PollService.deletePoll({pollId: pollId, userId: userId})
+        console.log(res)
+        window.alert("You've succeed deleted this poll.")
+        this.$route.router.go('/polls')
+      } else {
+        console.log('not login')
+      }
     }
   }
 }
@@ -85,4 +123,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.container {
+  padding: 0px;
+}
 </style>

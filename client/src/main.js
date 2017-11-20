@@ -6,7 +6,8 @@ import router from './router'
 import { sync } from 'vuex-router-sync'
 import store from '@/store/store'
 import Vuetify from 'vuetify'
-import('vuetify/dist/vuetify.min.css')
+import('vuetify/dist/vuetify.css')
+
 Vue.use(Vuetify)
 Vue.config.productionTip = false
 
@@ -16,6 +17,7 @@ new Vue({
   el: '#app',
   router,
   store,
-  template: '<App/>',
+  // template: '<App/>',
+  render: h => h(App),
   components: { App }
 })
