@@ -22,8 +22,6 @@
       </v-btn>
       <v-btn @click="clear">clear</v-btn>
     </v-form>
-    <p>{{options}}</p>
-    <p>{{optionsObjArr}}</p>
   </div>
 </template>
 
@@ -50,6 +48,7 @@ export default {
       this.title = null
       this.options = ''
     },
+    // create new poll
     async submit () {
       const userId = this.$store.state.user.id
       const obj = {
@@ -58,11 +57,11 @@ export default {
         options: this.optionsObjArr
       }
       var res = (await PollService.post(obj)).data
-      console.log(res)
+      // navigate to the newly created poll
       this.$router.push({
         name: 'view-poll',
-        path: 'polls',
-        query: {
+        path: '/poll/:pollId',
+        params: {
           pollId: res.poll.id
         }
       })

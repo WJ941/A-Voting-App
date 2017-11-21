@@ -1,0 +1,18 @@
+[
+  {
+    "PollId": 1,
+    "UserId": 1
+  },
+  {
+    "PollId": 2,
+    "UserId": 1
+  },
+  {
+    "PollId": 3,
+    "UserId": 1
+  },
+  {
+    "PollId": 4,
+    "UserId": 1
+  }
+]

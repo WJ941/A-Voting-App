@@ -56,4 +56,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
 }
+div.menu__activator {
+  height: 100%;
+}
 </style>

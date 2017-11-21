@@ -2,6 +2,7 @@ const {
   Poll,
   Option,
   pollOption,
+  PollUser,
   User,
   UserOauth,
   sequelize
@@ -11,6 +12,7 @@ const Promise = require('bluebird')
 const polls = require('./Polls.json')
 const options = require('./Options.json')
 const polls_options = require('./Polls_Options.json')
+const polls_users = require('./Polls_Users.json')
 const users = require('./Users.json')
 const userOauths = require('./UsersOauth.json')
 sequelize.sync({force:true})
@@ -38,6 +40,11 @@ sequelize.sync({force:true})
   await Promise.all(
     polls_options.map( x => {
       pollOption.create( x )
+    })
+  ),
+  await Promise.all(
+    polls_users.map( x => {
+      PollUser.create( x )
     })
   )
 });

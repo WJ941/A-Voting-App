@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     avatar: DataTypes.STRING
   })
   User.associate = function (model) {
-    User.hasMany(model.Poll)
     User.hasMany(model.UserOauth)
   }
   return User

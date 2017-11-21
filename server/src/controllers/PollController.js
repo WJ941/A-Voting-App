@@ -1,23 +1,31 @@
 const {
   Poll,
   pollOption,
+  PollUser,
   Option,
-  UserGithub
+  User
 } = require('../models')
 var Promise = require('bluebird')
 module.exports = {
   async index (req, res) {
-    let polls = null
+    var polls
+    var userPolls
     try {
       const userId = req.query.userId
       const pollId = req.query.pollId
+      // if query certain user's polls
       if (userId) {
-        polls = await Poll.findAll({
+        userPolls = await PollUser.findAll({
           where: {
             UserId: userId
-          }
+          },
+          include: [
+            {model: Poll}
+          ]
         })
+        polls = userPolls.map((x) => x.Poll)
       } else if (pollId) {
+        // if query certain poll with pollId
         polls = await pollOption.findAll({
           where: {
             pollId: pollId
@@ -32,11 +40,11 @@ module.exports = {
           ]
         })
       } else {
+        // if don't have querys, return all polls
         polls = await Poll.findAll({
           // limit: 10
         })
       }
-      console.log(pollId, req.query)
       res.status(200).send(polls)
     } catch (error) {
       res.status(500).send({
@@ -45,28 +53,39 @@ module.exports = {
       })
     }
   },
+  // create new poll
   async post (req, res) {
     var data = req.body
-    console.log('userId: ', data.userId)
-    try {
-      var user = await UserGithub.findOne({
-        where: {id: data.userId}
-      })
-    } catch (e) {
-      res.status(200).end('Can not find the user in database')
+    var {userId, title, options} = data
+    // verify the necessary data
+    if (!userId || !title || !options) {
+      res.status(200).end('Missing Data')
     }
+    // find the user, user should exist
     try {
-      var [poll, pollIsNew] = await Poll.findOrCreate({
+      // should verify user's token
+      var user = await User.findById(userId)
+      if (!user) { res.status(200).end('Can not find the user in database') }
+    } catch (e) {
+      res.status(500).end('error occurs in find the user')
+    }
+    // create the poll(maybe have same title)
+    try {
+      var [poll] = await Poll.findOrCreate({
         where: {
-          title: data.title,
-          UserGithubId: user.id
+          title: title
+        }
+      })
+      var [pollUser] = await PollUser.findOrCreate({
+        where: {
+          PollId: poll.id,
+          UserId: user.id
         }
       })
     } catch (e) {
       return res.status(400).send('Error ocoured in creating poll')
     }
     // ---------------save options------------
-    var options = data.options
     var newOptions = await Promise.map(options, function (option) {
       return Option.findOrCreate({where: option})
     })
@@ -79,10 +98,11 @@ module.exports = {
         }
       })
     })
+    newPollOptions = newPollOptions.map(x => x[0])
     res.status(200).send({
       user: user,
       poll: poll,
-      pollIsNew: pollIsNew,
+      pollUser: pollUser,
       options: newOptions,
       PollOption: newPollOptions
     })

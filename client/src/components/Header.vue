@@ -23,9 +23,7 @@
       <v-btn
         flat
         v-if="$store.state.isUserLoggedIn"
-        :to="{
-          path:'/newPoll'
-        }"
+        @click="newPoll"
       >New Polls</v-btn>
       <v-menu offset-y v-if="$store.state.isUserLoggedIn">
         <v-btn class="primary--text" slot="activator">{{$store.state.user.nickname}}</v-btn>
@@ -76,6 +74,11 @@ export default {
       this.$router.push({
         path: `/polls`
       })
+    },
+    newPoll () {
+      this.$router.push({
+        path: '/newPoll'
+      })
     }
   }
 }
@@ -97,7 +100,7 @@ export default {
 .btn {
   height: 100%;
 }
-.menu__activator {
-  height: 100%;
+.btn-toggle .btn {
+  opacity: 1;
 }
 </style>

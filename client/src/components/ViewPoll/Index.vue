@@ -32,7 +32,7 @@
           style="width:350px"
           class="error"
           @click="deletePoll"
-          v-if="this.poll.UserGithubId === this.$store.state.user.id"
+          v-if="this.poll.UserId === this.$store.state.user.id"
         >delete poll</v-btn>
       </v-flex>
     </v-layout>
@@ -50,7 +50,7 @@ export default {
       poll: {
         title: '',
         options: [],
-        UserGithubId: null
+        UserId: null
       },
       newOptionId: null
     }
@@ -95,7 +95,7 @@ export default {
       })).data
       this.poll.title = data[0].Poll.title
       this.poll.options = data.map(x => x.Option)
-      this.poll.UserGithubId = data[0].Poll.UserGithubId
+      this.poll.UserId = data[0].Poll.UserId
     },
     shareTwt () {
       const curHref = location.href
@@ -108,11 +108,9 @@ export default {
       if (window.confirm('Do you really want to delete this poll?') && this.$store.state.user) {
         const pollId = this.$route.params.pollId
         const userId = this.$store.state.user.id
-        console.log('pollId', pollId, 'userId', userId)
-        var res = await PollService.deletePoll({pollId: pollId, userId: userId})
-        console.log(res)
+        await PollService.deletePoll({pollId: pollId, userId: userId})
         window.alert("You've succeed deleted this poll.")
-        this.$route.router.go('/polls')
+        window.location.replace('/polls')
       } else {
         console.log('not login')
       }
