@@ -30,7 +30,7 @@ export default {
         for (let key in data) {
           sessionStorage.setItem(key, data[key])
         }
-      } else if (event.key === 'userLoggedin') {
+      } else if (event.key === 'isUserLoggedin') {
         console.log(event.key, event.newValue)
         that.setState()
       }

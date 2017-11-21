@@ -3,12 +3,10 @@
   <v-toolbar>
     <v-toolbar-title>fcc-Voting</v-toolbar-title>
     <v-spacer></v-spacer>
-    <v-toolbar-items>
+    <v-btn-toggle mandatory v-model="toggle_one">
       <v-btn
         flat
-        :to="{
-          name: 'polls'
-        }"
+        @click="getPolls"
       >Home</v-btn>
       <v-btn
         v-if="!$store.state.isUserLoggedIn"
@@ -30,14 +28,14 @@
         }"
       >New Polls</v-btn>
       <v-menu offset-y v-if="$store.state.isUserLoggedIn">
-        <v-btn class="primary--text"  slot="activator">{{$store.state.user.username}}</v-btn>
+        <v-btn class="primary--text" slot="activator">{{$store.state.user.nickname}}</v-btn>
         <v-list>
           <v-list-tile v-for="item in items" :key="item.title" @click="">
             <v-list-tile-title @click="logout">log out</v-list-tile-title>
           </v-list-tile>
         </v-list>
       </v-menu>
-    </v-toolbar-items>
+    </v-btn-toggle>
   </v-toolbar>
   </v-container>
 </template>
@@ -50,7 +48,8 @@ export default {
     return {
       items: [
         { title: 'Log Out' }
-      ]
+      ],
+      toggle_one: 0
     }
   },
   methods: {
@@ -64,8 +63,19 @@ export default {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('setUser', null)
     },
-    async getMyPolls () {
-      this.$store.dispatch('setPolls', true)
+    getMyPolls () {
+      this.$store.dispatch('toGetMyPolls', Date.now())
+      let userId = this.$store.state.user.id
+      this.$router.push({
+        path: `/polls?userId=${userId}`
+      })
+    },
+    getPolls () {
+      console.log('getpolls')
+      this.$store.dispatch('toGetPolls', Date.now())
+      this.$router.push({
+        path: `/polls`
+      })
     }
   }
 }
@@ -78,5 +88,16 @@ export default {
 }
 .btn--raised {
   box-shadow: none;
+}
+.application--light .btn-toggle{
+  height: 100%;
+  background: none;
+  box-shadow: none;
+}
+.btn {
+  height: 100%;
+}
+.menu__activator {
+  height: 100%;
 }
 </style>

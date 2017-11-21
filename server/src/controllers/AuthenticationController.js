@@ -61,7 +61,6 @@ module.exports = {
             }
           }
         )
-        console.log('user id:::  ', oauthedUser.UserId)
         var user = await User.findById(oauthedUser.UserId)
         oauthedUser = await UserOauth.findById(oauthedUser.id)
         responseData = {
@@ -81,7 +80,6 @@ module.exports = {
           identifier: identifier,
           credential: credential
         })
-        console.log('newUserOauth', newUserOauth)
         responseData = {
           user: newUser,
           token: newUserOauth.redential

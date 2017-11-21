@@ -14,7 +14,7 @@ module.exports = {
       if (userId) {
         polls = await Poll.findAll({
           where: {
-            UserGitHubId: userId
+            UserId: userId
           }
         })
       } else if (pollId) {

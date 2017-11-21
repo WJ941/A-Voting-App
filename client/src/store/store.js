@@ -8,7 +8,8 @@ export default new VueX.Store({
     isUserLoggedIn: false,
     user: null,
     token: null,
-    isGetMyPolls: false
+    toGetMyPolls: null,
+    toGetPolls: null
   },
   mutations: {
     setUser (state, user) {
@@ -23,8 +24,11 @@ export default new VueX.Store({
         state.token = null
       }
     },
-    setPolls (state, polls) {
-      state.isGetMyPolls = polls
+    toGetMyPolls (state, datetime) {
+      state.toGetMyPolls = datetime
+    },
+    toGetPolls (state, datetime) {
+      state.toGetPolls = datetime
     }
   },
   actions: {
@@ -34,8 +38,11 @@ export default new VueX.Store({
     setToken ({commit}, token) {
       commit('setToken', token)
     },
-    setPolls ({commit}, polls) {
-      commit('setPolls', polls)
+    toGetMyPolls ({commit}, datetime) {
+      commit('toGetMyPolls', datetime)
+    },
+    toGetPolls ({commit}, datetime) {
+      commit('toGetPolls', datetime)
     }
   }
 })

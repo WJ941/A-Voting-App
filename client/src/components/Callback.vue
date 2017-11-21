@@ -13,20 +13,12 @@ export default {
   },
   async mounted () {
     let query = location.search
-    this.userInfo = (await Authentication.getUserInfo(query)).data
-    console.log(this.userInfo)
-    // const {email, login} = this.userInfo
-    // if (email && login) {
-    //   const response = (await Authentication.signinGithub({
-    //     email: email,
-    //     username: login
-    //   })).data
-    //   sessionStorage.setItem('user', JSON.stringify(response.user))
-    //   sessionStorage.setItem('token', response.token)
-    //   localStorage.setItem('userLoggedin', Date.now())
-    //   console.log('storage changed')
-    //   window.close()
-    // }
+    this.response = (await Authentication.getUserInfo(query)).data
+    sessionStorage.setItem('user', JSON.stringify(this.response.user))
+    sessionStorage.setItem('token', this.response.token)
+    localStorage.setItem('isUserLoggedin', Date.now())
+    console.log('storage changed')
+    // window.close()
   }
 }
 </script>

@@ -41,7 +41,7 @@ export default {
     }
   },
   async mounted () {
-    this.polls = (await PollService.index()).data
+    this.$store.dispatch('toGetPolls', Date.now())
   },
   methods: {
     navigatedTo (args) {
@@ -49,17 +49,23 @@ export default {
     }
   },
   computed: {
-    isGetMyPolls () {
-      return this.$store.state.isGetMyPolls
+    toGetMyPolls () {
+      return this.$store.state.toGetMyPolls
+    },
+    toGetPolls () {
+      return this.$store.state.toGetPolls
     }
   },
   watch: {
-    async isGetMyPolls () {
+    async toGetMyPolls () {
       let userId = this.$store.state.user.id
       let response = (await PollService.index({
         userId: userId
       })).data
       this.polls = response
+    },
+    async toGetPolls () {
+      this.polls = (await PollService.index()).data
     }
   }
 }
