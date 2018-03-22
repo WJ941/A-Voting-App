@@ -8,6 +8,6 @@ app.get('*', function(req, res) {
     const html = fs.readFileSync(path.resolve(__dirname, './dist/index.html'), 'utf-8')
     res.send(html)
 })
-app.listen(8080, function() {
-  console.log('you are listening : ',8080)
+app.listen(4000, function() {
+  console.log('you are listening : ',4000)
 });
