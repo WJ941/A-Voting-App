@@ -18,7 +18,7 @@ export default {
     sessionStorage.setItem('token', this.response.token)
     localStorage.setItem('isUserLoggedin', Date.now())
     console.log('storage changed')
-    // window.close()
+    window.close()
   }
 }
 </script>

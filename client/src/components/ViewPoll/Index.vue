@@ -32,7 +32,7 @@
           style="width:350px"
           class="error"
           @click="deletePoll"
-          v-if="this.poll.UserId === this.$store.state.user.id"
+          v-if="this.$store.state.user && this.poll.UserId === this.$store.state.user.id"
         >delete poll</v-btn>
       </v-flex>
     </v-layout>
