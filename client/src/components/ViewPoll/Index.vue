@@ -42,7 +42,7 @@
 <script>
 import PollService from '@/service/PollService'
 import optionService from '@/service/optionService'
-import PieChart from './Piechart'
+import PieChart from './Piechart.vue'
 export default {
   data () {
     return {
