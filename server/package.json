@@ -2,6 +2,10 @@
   "name": "server",
   "version": "1.0.0",
   "description": "server with expressjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/WJ941/A-Voting-App/server"
+  },
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
