@@ -93,9 +93,10 @@ export default {
       const data = (await PollService.index({
         pollId: pollId
       })).data
-      this.poll.title = data[0].Poll.title
-      this.poll.options = data.map(x => x.Option)
-      this.poll.UserId = data[0].Poll.UserId
+      console.log(data)
+      this.poll.title = data.options[0].Poll.title
+      this.poll.options = data.options.map(x => x.Option)
+      this.poll.UserId = data.user[0].UserId
     },
     shareTwt () {
       const curHref = location.href

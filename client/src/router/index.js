@@ -10,6 +10,11 @@ export default new Router({
   mode: 'history',
   routes: [
     {
+      path: '/',
+      name: 'home',
+      component: Polls
+    },
+    {
       path: '/polls',
       name: 'polls',
       component: Polls

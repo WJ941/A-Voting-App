@@ -26,7 +26,7 @@ module.exports = {
         polls = userPolls.map((x) => x.Poll)
       } else if (pollId) {
         // if query certain poll with pollId
-        polls = await pollOption.findAll({
+        var options = await pollOption.findAll({
           where: {
             pollId: pollId
           },
@@ -39,6 +39,20 @@ module.exports = {
             }
           ]
         })
+        var user = await PollUser.findAll({
+          where: {
+            pollId: pollId
+          },
+          include: [
+            {
+              model: Poll
+            },
+            {
+              model: User
+            }
+          ]
+        })
+        polls = {options: options, user: user}
       } else {
         // if don't have querys, return all polls
         polls = await Poll.findAll({
