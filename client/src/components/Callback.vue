@@ -17,7 +17,6 @@ export default {
     sessionStorage.setItem('user', JSON.stringify(this.response.user))
     sessionStorage.setItem('token', this.response.token)
     localStorage.setItem('isUserLoggedin', Date.now())
-    console.log('storage changed')
     window.close()
   }
 }
